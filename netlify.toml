@@ -1,0 +1,74 @@
+# Netlify Configuration for TadiAI Flask Application
+# Configure deployment, build settings, and serverless functions
+
+[build]
+  # Base directory containing source code
+  base = "/"
+  
+  # Build command - install Python dependencies
+  command = "pip install -r requirements.txt && mkdir -p netlify/functions"
+  
+  # Directory with static files to publish
+  publish = "app/templates"
+  
+  # Python version for Netlify Functions
+  functions = "netlify/functions"
+
+# Environment variables - Production
+[env.production]
+  FLASK_ENV = "production"
+  FLASK_DEBUG = "0"
+
+# Environment variables - Development/Preview
+[env.development]
+  FLASK_ENV = "development"
+  FLASK_DEBUG = "1"
+
+# Route all requests to Flask serverless function
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
+
+# Cache headers for static assets
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache headers for HTML files
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+# Security headers for all responses
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
+
+# Production context
+[context.production]
+  command = "pip install -r requirements.txt"
+  [context.production.environment]
+    FLASK_ENV = "production"
+    FLASK_DEBUG = "0"
+
+# Deploy preview context
+[context.deploy-preview]
+  command = "pip install -r requirements.txt"
+  [context.deploy-preview.environment]
+    FLASK_ENV = "development"
+    FLASK_DEBUG = "1"
+
+# Branch deploy context
+[context.branch-deploy]
+  command = "pip install -r requirements.txt"
+  [context.branch-deploy.environment]
+    FLASK_ENV = "development"
+    FLASK_DEBUG = "1"
