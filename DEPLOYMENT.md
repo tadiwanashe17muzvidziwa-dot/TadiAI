@@ -52,7 +52,7 @@ In Netlify Dashboard:
 3. Add the following environment variables:
 
 | Variable | Value | Required |
-|----------|-------|----------|
+| --- | --- | --- |
 | `GEMINI_API_KEY` | Your Google Gemini API key | ✅ Yes |
 | `FLASK_ENV` | `production` | Optional |
 | `FLASK_DEBUG` | `0` | Optional |
@@ -80,6 +80,7 @@ Once environment variables are set:
 ### Issue: "404 Not Found" error
 
 **Solution:**
+
 1. Check `netlify.toml` is in the project root
 2. Verify build command ran successfully (check build logs)
 3. Ensure `netlify/functions/server.py` exists
@@ -88,6 +89,7 @@ Once environment variables are set:
 ### Issue: "GEMINI_API_KEY is not configured"
 
 **Solution:**
+
 1. Go to Netlify **Site settings** → **Environment**
 2. Verify `GEMINI_API_KEY` variable is set
 3. Trigger a new deploy after adding the variable
@@ -96,6 +98,7 @@ Once environment variables are set:
 ### Issue: Function timeout (5+ seconds)
 
 **Solution:**
+
 - Netlify Functions have a 26-second timeout limit (free) or 900 seconds (paid)
 - Check if Gemini API is responding slowly
 - Try using a different model or API endpoint
@@ -103,6 +106,7 @@ Once environment variables are set:
 ### Issue: "python-dotenv not found"
 
 **Solution:**
+
 1. Verify `requirements.txt` includes `python-dotenv==1.1.1`
 2. Push changes to Git
 3. Trigger a new deploy on Netlify
@@ -198,6 +202,7 @@ Before deploying anywhere, ensure you have:
 ```
 
 Or via Git:
+
 ```bash
 git revert HEAD
 git push origin main
@@ -225,6 +230,7 @@ For faster deployments:
 ---
 
 **Need help?** Check:
+
 - [Netlify Docs](https://docs.netlify.com/)
 - [Flask Deployment Guide](https://flask.palletsprojects.com/deployment/)
 - [Google Gemini API Docs](https://ai.google.dev/docs)

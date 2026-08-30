@@ -25,6 +25,7 @@
 ## Features
 
 ✨ **Core Features**
+
 - 🤖 **AI-Powered Chat** - Leverage Google's Gemini API for intelligent conversations
 - 🎯 **Personalized Responses** - Configure the AI to match your communication style and personality
 - 💬 **Conversation History** - Maintains context across conversations (last 20 messages)
@@ -74,6 +75,7 @@ pip install -r requirements.txt
 ```
 
 **Dependencies:**
+
 - `Flask==3.1.3` - Web framework
 - `google-genai==2.19.0` - Google Gemini API client
 - `python-dotenv==1.1.1` - Environment variable management
@@ -81,11 +83,13 @@ pip install -r requirements.txt
 ### Step 4: Set Up Environment Variables
 
 1. Copy `.env.example` to `.env`:
+
    ```bash
    cp .env.example .env
    ```
 
 2. Edit `.env` and add your credentials:
+
    ```env
    GEMINI_API_KEY=your_actual_gemini_api_key_here
    FLASK_DEBUG=1
@@ -114,7 +118,7 @@ The application will start on `http://localhost:5000`
 
 ### Example Conversation
 
-```
+```text
 You: Hello! What can you help me with?
 TadiAI: [Response based on your configured personality]
 
@@ -124,7 +128,7 @@ TadiAI: [Personalized response about Python]
 
 ## Project Structure
 
-```
+```text
 TadiAI/
 ├── main.py                          # Application entry point
 ├── run.py                           # Alternative runner
@@ -147,7 +151,7 @@ TadiAI/
 ### File Descriptions
 
 | File | Purpose |
-|------|---------|
+| --- | --- |
 | `main.py` | Entry point that creates and runs the Flask application |
 | `app/__init__.py` | Flask app factory, loads environment variables |
 | `app/routes.py` | Defines HTTP routes: `/` (chat page) and `/api/chat` (API endpoint) |
@@ -188,6 +192,7 @@ You are replying in the user's personal style. Use these personality details:
 ```
 
 **Customization Options:**
+
 - **Tone**: Set the conversational style (formal, casual, friendly, etc.)
 - **Traits**: Define personality characteristics
 - **Expressions**: Add common phrases you use
@@ -231,6 +236,7 @@ The app provides a REST API endpoint for programmatic access:
 **Endpoint**: `POST /api/chat`
 
 **Request:**
+
 ```json
 {
   "message": "Your message here",
@@ -242,6 +248,7 @@ The app provides a REST API endpoint for programmatic access:
 ```
 
 **Response:**
+
 ```json
 {
   "response": "The AI's response to your message"
@@ -249,26 +256,27 @@ The app provides a REST API endpoint for programmatic access:
 ```
 
 **Error Responses:**
+
 ```json
-{"error": "Enter a message first."}              // 400
-{"error": "Conversation history must be a list."} // 400
-{"error": "The AI usage limit has been reached..."} // 429
-{"error": "Gemini could not respond..."} // 502
+{"error": "Enter a message first."}
 ```
 
 ## API Endpoints
 
-### `GET /`
+### GET /
+
 Serves the chat interface HTML page.
 
 **Response:** HTML chat page
 
 ---
 
-### `POST /api/chat`
+### POST /api/chat
+
 Processes a chat message and returns an AI response.
 
 **Request Body:**
+
 ```json
 {
   "message": "string",
@@ -279,6 +287,7 @@ Processes a chat message and returns an AI response.
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "response": "AI's response text"
@@ -286,6 +295,7 @@ Processes a chat message and returns an AI response.
 ```
 
 **Response (400 Bad Request):**
+
 ```json
 {
   "error": "Error message"
@@ -293,6 +303,7 @@ Processes a chat message and returns an AI response.
 ```
 
 **Response (429 Too Many Requests):**
+
 ```json
 {
   "error": "The AI usage limit has been reached. Please try again later..."
@@ -300,6 +311,7 @@ Processes a chat message and returns an AI response.
 ```
 
 **Response (502 Bad Gateway):**
+
 ```json
 {
   "error": "Gemini could not respond. Check the server logs."
@@ -310,7 +322,7 @@ Processes a chat message and returns an AI response.
 
 ### Application Flow
 
-```
+```text
 ┌─────────────────┐
 │   Browser UI    │
 │  (index.html)   │
@@ -368,6 +380,7 @@ Processes a chat message and returns an AI response.
 ### Issue: "GEMINI_API_KEY is not configured"
 
 **Solution:**
+
 1. Create `.env` file in the project root
 2. Add your API key: `GEMINI_API_KEY=your_key_here`
 3. Restart the application
@@ -375,6 +388,7 @@ Processes a chat message and returns an AI response.
 ### Issue: Module not found error (e.g., "No module named 'flask'")
 
 **Solution:**
+
 ```bash
 # Activate your virtual environment first
 source venv/bin/activate  # macOS/Linux
@@ -387,6 +401,7 @@ pip install -r requirements.txt
 ### Issue: "Connection refused" or port already in use
 
 **Solution:**
+
 ```bash
 # Use a different port
 PORT=8000 python main.py
@@ -399,6 +414,7 @@ PORT=8000 python main.py
 ### Issue: 429 Error - "AI usage limit has been reached"
 
 **Solution:**
+
 - You've hit the Google Gemini API rate limit
 - Wait a few minutes and try again
 - Check your API plan at [Google AI Studio](https://aistudio.google.com)
@@ -407,6 +423,7 @@ PORT=8000 python main.py
 ### Issue: Chat responses are not personalized
 
 **Solution:**
+
 1. Edit the `PERSONALITY` variable in `app/services/gemini.py`
 2. Restart the application
 3. Start a new chat conversation for changes to take effect
@@ -414,6 +431,7 @@ PORT=8000 python main.py
 ### Issue: Browser shows blank page or errors
 
 **Solution:**
+
 1. Check the browser console (F12 → Console tab) for errors
 2. Check the Flask server logs in the terminal
 3. Verify the server is running on the expected port
@@ -474,6 +492,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Support
 
 For issues, questions, or suggestions:
+
 - Open an issue on the repository
 - Check existing issues for solutions
 - Review the Troubleshooting section above
@@ -487,40 +506,3 @@ For issues, questions, or suggestions:
 ---
 
 **Last Updated**: August 2026
-
-## Project structure
-
-```text
-TadiAI/
-├── app/
-│   ├── services/
-│   │   └── gemini.py       # Gemini client integration
-│   ├── templates/
-│   │   └── index.html       # Browser interface
-│   ├── __init__.py          # Flask app factory and configuration
-│   └── routes.py            # Web and API routes
-├── main.py                  # Compatibility launcher
-├── run.py                   # Application entry point
-├── requirements.txt
-└── .env                    # Local API key, ignored by Git
-```
-
-## Start the app
-
-Create a local environment file from the example and add a new Gemini key:
-
-```cmd
-copy .env.example .env
-notepad .env
-```
-
-Then start Flask from the project directory:
-
-```powershell
-.\venv\Scripts\python.exe main.py
-```
-
-Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser.
-#   T a d i A I 
- 
- 
