@@ -19,14 +19,16 @@ except ImportError as exc:
 
 # --- Configuration -------------------------------------------------------------
 
-MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
+MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
 
 # Supported models — update this list when Google releases new versions
 SUPPORTED_MODELS = {
-    "gemini-2.0-flash",
     "gemini-2.5-flash",
-    "gemini-2.0-pro",
     "gemini-2.5-pro",
+    "gemini-3.5-flash",
+    "gemini-3.6-flash",
+    "gemini-3.7-flash",
+    "gemini-3.8-flash",
 }
 
 PERSONALITY = """
