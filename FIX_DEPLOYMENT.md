@@ -26,7 +26,7 @@ Use Railway, Render, or Heroku. These services can run a Flask app and expose th
 4. **Choose**: Your TadiAI repository
 5. **Add environment variables**:
    - `GEMINI_API_KEY` = your actual Gemini API key
-   - `GEMINI_MODEL` = `gemini-2.0-flash` (optional but recommended)
+   - `GEMINI_MODEL` = `gemini-3.6-flash` (optional but recommended)
    - `PORT` = `5000` (optional if the platform sets it automatically)
 6. **Click Deploy**
 
@@ -94,7 +94,7 @@ Once deployment starts:
 2. Click **+ New Variable**
 3. Add:
    - `GEMINI_API_KEY` = your Gemini API key from [aistudio.google.com](https://aistudio.google.com/app/apikey)
-   - `GEMINI_MODEL` = `gemini-2.0-flash` (optional, but recommended)
+   - `GEMINI_MODEL` = `gemini-3.6-flash` (optional, but recommended)
 4. Click **Redeploy Project** (if prompted)
 
 ### 5. Get Your Live URL
@@ -125,7 +125,7 @@ Once deployed:
 
 ### Issue: "Model not found" or invalid Gemini model
 **Fix**:
-1. Set `GEMINI_MODEL` to `gemini-2.0-flash`
+1. Set `GEMINI_MODEL` to `gemini-3.6-flash`
 2. Or leave it unset to use the app default
 3. Redeploy after changing the variable
 

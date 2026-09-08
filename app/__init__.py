@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -15,7 +16,6 @@ def create_app() -> Flask:
     app = Flask(__name__)
 
     # CORS — restrict via CORS_ORIGINS env var (comma-separated) in production
-    import os
     origins = os.getenv("CORS_ORIGINS", "*").split(",")
     CORS(app, origins=[o.strip() for o in origins if o.strip()])
 

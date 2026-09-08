@@ -39,7 +39,7 @@
 
 Before you begin, ensure you have the following installed:
 
-- **Python 3.8** or higher
+- **Python 3.10** or higher
 - **pip** (Python package manager)
 - **Git** (optional, for cloning the repository)
 - A modern web browser (Chrome, Firefox, Safari, Edge)
@@ -76,8 +76,11 @@ pip install -r requirements.txt
 
 **Dependencies:**
 
-- `Flask==3.1.3` - Web framework
-- `google-genai==2.19.0` - Google Gemini API client
+- `fastapi==0.141.1` - Production web framework
+- `uvicorn==0.52.4` - ASGI server
+- `gunicorn==26.2.0` - WSGI server
+- `flask==3.1.3` - Local dev web framework
+- `google-genai==2.22.0` - Google Gemini API client
 - `python-dotenv==1.1.1` - Environment variable management
 
 ### Step 4: Set Up Environment Variables
@@ -92,13 +95,13 @@ pip install -r requirements.txt
 
   ```env
    GEMINI_API_KEY=your_actual_gemini_api_key_here
-  GEMINI_MODEL=gemini-2.0-flash
+  GEMINI_MODEL=gemini-3.6-flash
    FLASK_DEBUG=1
    PORT=5000
    ```
 
 - `GEMINI_API_KEY`: Your Google Gemini API key
-- `GEMINI_MODEL`: The Gemini model to use (default is `gemini-2.0-flash`)
+- `GEMINI_MODEL`: The Gemini model to use (default is `gemini-3.6-flash`)
 - `FLASK_DEBUG`: Set to `1` for development mode (auto-reload on changes)
 - `PORT`: The port to run the Flask server on (default: 5000)
 
@@ -194,7 +197,7 @@ Create a `.env` file in the project root:
 GEMINI_API_KEY=your_actual_key_here
 
 # Optional: Model selection (matches the app's default model)
-GEMINI_MODEL=gemini-2.0-flash
+GEMINI_MODEL=gemini-3.6-flash
 
 # Optional: Flask debug mode (1 = enabled, 0 = disabled)
 FLASK_DEBUG=1
@@ -226,11 +229,11 @@ You are replying in the user's personal style. Use these personality details:
 
 ### Model Configuration
 
-The app uses `gemini-2.0-flash` by default. To change the model:
+The app uses `gemini-3.6-flash` by default. To change the model:
 
 ```python
 # In app/services/gemini.py
-MODEL_NAME = "gemini-2.0-flash"  # Change this to another model
+MODEL_NAME = "gemini-3.6-flash"  # Change this to another model
 ```
 
 Available models: Check [Google Gemini documentation](https://ai.google.dev/models)
@@ -244,7 +247,7 @@ Available models: Check [Google Gemini documentation](https://ai.google.dev/mode
 python main.py
 
 # Production mode
-FLASK_DEBUG=0 python main.py
+uvicorn backend:app --host 0.0.0.0 --port 8000
 ```
 
 ### Using the Chat Interface
@@ -533,7 +536,7 @@ For issues, questions, or suggestions:
 
 ## Acknowledgments
 
-- Built with [Flask](https://flask.palletsprojects.com/)
+- Built with [Flask](https://flask.palletsprojects.com/) and [FastAPI](https://fastapi.tiangolo.com/)
 - Powered by [Google Gemini API](https://ai.google.dev/)
 - Python community for amazing libraries
 

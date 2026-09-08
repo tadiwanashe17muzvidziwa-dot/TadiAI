@@ -185,7 +185,7 @@ Before deploying, prepare these environment variables:
 GEMINI_API_KEY=your-actual-key-here
 
 # Optional (defaults below)
-GEMINI_MODEL=gemini-2.0-flash
+GEMINI_MODEL=gemini-3.6-flash
 PORT=8000
 ```
 
