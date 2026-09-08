@@ -1,38 +1,38 @@
-# 🔧 Fix for Your Netlify Deployment Issue
+# 🔧 Deployment Fix for This Flask App
 
 ## The Problem
 
-Your app at `https://tadiai.netlify.app/` shows a **404 error** when you try to send messages because:
+This project is a Flask application, and the deployment target must support a Python web process.
 
-**Netlify does NOT support Python serverless functions.** 😞
+The main issues are:
 
-Netlify was designed for:
-- ✅ Static websites
-- ✅ JavaScript/TypeScript functions only
-- ❌ NOT Python Flask apps
+- The app runs a Python Flask server from `main.py`
+- The API route `/api/chat` requires a live Python backend
+- Static-only hosting is not the right fit for this app
 
-When your browser tries to call the API (`/.netlify/functions/server`), Netlify can't run the Python function, so it returns 404.
+If you deploy it to a static-only host, requests to the chat API fail or return 404s.
 
 ---
 
-## The Solution: Switch to Railway ⚡
+## The Solution: Use a Python Hosting Platform ⚡
 
-Railway is perfect for Flask apps and takes **2 minutes** to deploy.
+Use Railway, Render, or Heroku. These services can run a Flask app and expose the required API routes.
 
-### Deploy Right Now
+### Deploy Right Now to Railway
 
 1. **Go to**: [railway.app](https://railway.app)
-2. **Sign up** with GitHub (click "Start a New Project")
+2. **Sign up** with GitHub
 3. **Select**: "Deploy from GitHub"
 4. **Choose**: Your TadiAI repository
-5. **Add environment variable**:
-   - Name: `GEMINI_API_KEY`
-   - Value: Your actual Gemini API key
+5. **Add environment variables**:
+   - `GEMINI_API_KEY` = your actual Gemini API key
+   - `GEMINI_MODEL` = `gemini-2.0-flash` (optional but recommended)
+   - `PORT` = `5000` (optional if the platform sets it automatically)
 6. **Click Deploy**
 
-That's it! Your app will be live in ~2 minutes at a URL like:
-```
-https://tadiai-production.up.railway.app
+Your app will be live at a Railway-generated URL such as:
+```text
+https://your-app.up.railway.app
 ```
 
 ### Why Railway Works
@@ -65,7 +65,7 @@ https://tadiai-production.up.railway.app
 
 ## What NOT To Do
 
-❌ **Don't keep using Netlify** - it won't work for Flask  
+❌ **Don't use a static-only host** for this Flask app  
 ❌ **Don't try to convert to JavaScript** - too complicated  
 ❌ **Don't use complex workarounds** - Railway is easier!  
 
@@ -87,14 +87,14 @@ Click "Start a New Project" → Sign in with GitHub
 - Select your TadiAI repo
 - Click "Deploy"
 
-### 4. Add Gemini API Key
+### 4. Add Required Environment Variables
 
 Once deployment starts:
 1. Go to **Project** → **Variables**
 2. Click **+ New Variable**
-3. Enter:
-   - Variable name: `GEMINI_API_KEY`
-   - Value: Your Gemini API key (from [aistudio.google.com](https://aistudio.google.com/app/apikeys))
+3. Add:
+   - `GEMINI_API_KEY` = your Gemini API key from [aistudio.google.com](https://aistudio.google.com/app/apikey)
+   - `GEMINI_MODEL` = `gemini-2.0-flash` (optional, but recommended)
 4. Click **Redeploy Project** (if prompted)
 
 ### 5. Get Your Live URL
@@ -108,7 +108,7 @@ Once deployed:
 
 1. Type a message: "Hello"
 2. Click Send
-3. Should get an AI response (not a 404!)
+3. Should get an AI response
 
 ---
 
@@ -118,9 +118,16 @@ Once deployed:
 **Check**: Project → Logs tab for error messages
 
 ### Issue: "GEMINI_API_KEY not found"
-**Fix**: 
-1. Verify variable is set in **Variables** tab
-2. Click **Redeploy Project**
+**Fix**:
+1. Verify the variable is set in **Variables** tab
+2. Redeploy the project
+3. Check the logs to confirm the Flask app is loading with the expected environment
+
+### Issue: "Model not found" or invalid Gemini model
+**Fix**:
+1. Set `GEMINI_MODEL` to `gemini-2.0-flash`
+2. Or leave it unset to use the app default
+3. Redeploy after changing the variable
 
 ### Issue: App is slow
 **Normal**: Free tier instances sleep after 15 min. First request takes 10-30 sec. Upgrade to paid to avoid.
@@ -130,27 +137,15 @@ Once deployed:
 
 ---
 
-## Key Differences: Netlify vs Railway
-
-| Feature | Netlify | Railway |
-| --- | --- | --- |
-| Python support | ❌ NO | ✅ YES |
-| Static sites | ✅ Perfect | ✅ Fine |
-| Flask apps | ❌ NO | ✅ Perfect |
-| Setup time | 1 min | 2 min |
-| Cost | Free | Free tier |
-| Configuration | None needed | None needed |
-
----
-
 ## Final Checklist
 
-Before deploying to Railway:
+Before deploying:
 
 - ✅ GitHub repository is up to date
-- ✅ You have `requirements.txt` with dependencies
+- ✅ `requirements.txt` includes the Flask and Google Gemini dependencies
 - ✅ You have a valid Gemini API key
-- ✅ Railway account created
+- ✅ The deployment target supports Python web processes
+- ✅ You set the required environment variables before launching the app
 
 ---
 
@@ -164,9 +159,9 @@ Before deploying to Railway:
 
 ## TL;DR - Just Do This
 
-1. Go to [railway.app](https://railway.app)
-2. Click "Deploy from GitHub" → select TadiAI repo
-3. Add `GEMINI_API_KEY` to Variables
-4. Done! Your app is live.
+1. Choose a Python hosting platform: Railway, Render, or Heroku
+2. Connect the GitHub repository
+3. Add `GEMINI_API_KEY` and optionally `GEMINI_MODEL`
+4. Deploy the app and test the chat page and API route
 
-🎉 That's literally it! Railway handles everything else.
+🎉 This is the correct setup for a Flask app like TadiAI.

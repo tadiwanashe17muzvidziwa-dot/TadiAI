@@ -1,3 +1,7 @@
+# LOCAL DEVELOPMENT SERVER — Do not use in production
+# For production, use backend.py (FastAPI) via Procfile
+# Run with: python main.py
+
 import os
 
 from app import create_app

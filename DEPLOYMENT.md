@@ -1,6 +1,6 @@
 # Deployment Guide - TadiAI
 
-This guide explains how to deploy TadiAI to various hosting platforms.
+This guide explains how to deploy the standalone FastAPI backend to various hosting platforms.
 
 ## ⚡ Quick Deploy to Railway (RECOMMENDED)
 
@@ -11,10 +11,11 @@ Railway is the easiest and fastest way to deploy Flask apps. No complex configur
 1. **Create Railway Account**: Go to [railway.app](https://railway.app) and sign up with GitHub
 2. **New Project**: Click "New Project" → "Deploy from GitHub"
 3. **Select Repository**: Choose your TadiAI repository
-4. **Add Environment Variable**: 
+4. **Add Environment Variable**:
    - Key: `GEMINI_API_KEY`
    - Value: Your actual Gemini API key
-5. **Deploy**: Click "Deploy" - done in ~2 minutes!
+5. **Set the start command** if needed: `uvicorn backend:app --host 0.0.0.0 --port $PORT`
+6. **Deploy**: Click "Deploy" - done in ~2 minutes!
 
 Your app will be live at: `https://tadiai-production.up.railway.app`
 
@@ -85,16 +86,11 @@ heroku logs --tail
 
 ---
 
-## Why NOT Netlify for This Project?
+## Best platform choice for this project
 
-Netlify is optimized for **static sites and JavaScript functions** only. It does NOT support Python serverless functions.
+This app exposes a standalone FastAPI backend with a live API, so it belongs on Python-native hosting. Railway and Render are the simplest options.
 
-**You'll get 404 errors** because:
-- Netlify expects JavaScript/TypeScript in `netlify/functions/`
-- Flask requires a Python runtime (not supported)
-- The workaround would require complex Node.js wrappers
-
-**Solution**: Use Railway or Render instead - they were built for Flask apps!
+**Recommended setup**: Use Railway or Render instead of a static host.
 
 ---
 
@@ -105,7 +101,6 @@ Netlify is optimized for **static sites and JavaScript functions** only. It does
 | **Railway** | Flask apps | 2 min | Free tier | ✅ Native |
 | **Render** | Full-stack | 3 min | Free tier | ✅ Native |
 | **Heroku** | All apps | 5 min | Paid | ✅ Native |
-| **Netlify** | Static sites | 1 min | Free | ❌ NO |
 
 ---
 
@@ -124,6 +119,7 @@ Netlify is optimized for **static sites and JavaScript functions** only. It does
 ### Common error: "GEMINI_API_KEY is not configured"
 
 **Solution:**
+
 1. Add environment variable in platform dashboard
 2. Redeploy the app
 3. Check logs to confirm it loaded
@@ -137,6 +133,7 @@ Netlify is optimized for **static sites and JavaScript functions** only. It does
 ### API responses are slow
 
 **Solution:**
+
 1. Check Gemini API status at [status.google.com](https://status.google.com)
 2. Upgrade your Gemini API plan
 3. Check network latency (might be distant server location)
@@ -146,16 +143,19 @@ Netlify is optimized for **static sites and JavaScript functions** only. It does
 ## Monitoring Your Deployment
 
 ### Railway
+
 - Dashboard shows live metrics
 - Logs tab shows all requests and errors
 - Deployments tab shows history
 
 ### Render
+
 - Dashboard shows uptime
 - Logs show all output
 - Metrics tab shows performance
 
 ### Heroku
+
 ```bash
 heroku logs --tail                    # Live logs
 heroku ps                             # View running processes
@@ -185,12 +185,12 @@ Before deploying, prepare these environment variables:
 GEMINI_API_KEY=your-actual-key-here
 
 # Optional (defaults below)
-FLASK_ENV=production
-FLASK_DEBUG=0
-PORT=5000
+GEMINI_MODEL=gemini-2.0-flash
+PORT=8000
 ```
 
 Add these in your platform's dashboard under:
+
 - **Railway**: Project → Variables
 - **Render**: Environment
 - **Heroku**: Settings → Config Vars

@@ -25,6 +25,9 @@ def chat():
 
     try:
         return jsonify({"response": generate_response(message, history)})
+    except RuntimeError as error:
+        current_app.logger.exception("Gemini configuration error")
+        return jsonify({"error": str(error)}), 500
     except Exception as error:
         current_app.logger.exception("Gemini request failed")
         if "429" in str(error) or "RESOURCE_EXHAUSTED" in str(error):

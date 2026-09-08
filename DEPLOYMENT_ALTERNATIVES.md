@@ -1,6 +1,7 @@
 # Railway Deployment Guide
 
 Railway is the easiest way to deploy TadiAI. It has:
+
 - ✅ Native Python support
 - ✅ Automatic environment variables
 - ✅ Easy scaling
@@ -27,6 +28,7 @@ Railway is the easiest way to deploy TadiAI. It has:
 ### Step 3: Deploy
 
 Railway will automatically:
+
 - Install dependencies from `requirements.txt`
 - Run your Flask app on port 5000
 - Assign a public URL (e.g., `https://tadiai-production.up.railway.app`)
@@ -50,7 +52,7 @@ railway up
 
 ---
 
-# Render Deployment Guide
+## Render Deployment Guide
 
 Render is another excellent option with simple Python support.
 
@@ -94,7 +96,7 @@ Render automatically redeploys when you push to GitHub!
 
 ---
 
-# Heroku Deployment Guide (Legacy but Simple)
+## Heroku Deployment Guide (Legacy but Simple)
 
 Heroku requires a Procfile but works well for Flask apps.
 
@@ -127,7 +129,7 @@ Update Procfile:
 web: gunicorn app:app
 ```
 
-### Step 3: Deploy
+### Step 3: Deploy to Heroku
 
 ```bash
 heroku login
@@ -145,14 +147,13 @@ heroku logs --tail
 
 ---
 
-# Comparison
+## Comparison
 
 | Platform | Ease | Cost | Python Support | Best For |
 | --- | --- | --- | --- | --- |
 | **Railway** | ⭐⭐⭐⭐⭐ | Free tier | ✅ Native | **Recommended** |
 | **Render** | ⭐⭐⭐⭐ | Free tier | ✅ Native | Good alternative |
 | **Heroku** | ⭐⭐⭐ | Paid only | ✅ Native | Legacy option |
-| **Netlify** | ⭐⭐ | Free | ❌ No Python | Not suitable |
 
 ---
 
@@ -169,11 +170,8 @@ Your TadiAI will be live with a URL like: `https://tadiai-production.up.railway.
 
 ---
 
-## Why NOT Netlify for Flask?
+## Best fit for this app
 
-- Netlify is optimized for static sites and JavaScript functions
-- Python functions require a Node.js wrapper (complex)
-- Railway/Render were built for full-stack apps like Flask
-- Much simpler setup and configuration
+This project is a Flask application, so it performs best on Python-native hosting providers such as Railway or Render.
 
-**Switch to Railway today!** It's literally easier and works perfectly with Flask. 🚀
+**Switch to Railway today!** It's the fastest path and works cleanly with Flask. 🚀

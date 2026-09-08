@@ -1,9 +1,9 @@
 # TadiAI
 
-> A personalized AI chat assistant powered by Google's Gemini API. TadiAI is a Flask web application that provides a clean browser interface for conversing with an AI that adapts to your communication style and personality.
+> A personalized AI chat assistant powered by Google's Gemini API. TadiAI provides a clean browser interface for conversing with an AI that adapts to your communication style and personality.
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![Flask](https://img.shields.io/badge/Flask-3.1%2B-green)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.141%2B-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ## Table of Contents
@@ -11,7 +11,7 @@
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
-- [Quick Start](#quick-start)
+- [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
 - [Configuration](#configuration)
 - [Usage](#usage)
@@ -90,25 +90,47 @@ pip install -r requirements.txt
 
 2. Edit `.env` and add your credentials:
 
-   ```env
+  ```env
    GEMINI_API_KEY=your_actual_gemini_api_key_here
+  GEMINI_MODEL=gemini-2.0-flash
    FLASK_DEBUG=1
    PORT=5000
    ```
 
-   - `GEMINI_API_KEY`: Your Google Gemini API key
-   - `FLASK_DEBUG`: Set to `1` for development mode (auto-reload on changes)
-   - `PORT`: The port to run the Flask server on (default: 5000)
+- `GEMINI_API_KEY`: Your Google Gemini API key
+- `GEMINI_MODEL`: The Gemini model to use (default is `gemini-2.0-flash`)
+- `FLASK_DEBUG`: Set to `1` for development mode (auto-reload on changes)
+- `PORT`: The port to run the Flask server on (default: 5000)
 
-## Quick Start
+## Getting Started
 
-### Running the Application
+### Running Locally (Development)
 
 ```bash
 python main.py
 ```
 
-The application will start on `http://localhost:5000`
+Flask starts on `http://localhost:5000` with hot-reload enabled.
+
+### Running in Production
+
+```bash
+uvicorn backend:app --host 0.0.0.0 --port 8000
+```
+
+Or via Procfile (auto-detected by Railway/Render/Heroku):
+```
+web: uvicorn backend:app --host 0.0.0.0 --port $PORT
+```
+
+### Quick Comparison
+
+| | Local Dev (`main.py`) | Production (`backend.py`) |
+|---|---|---|
+| Framework | Flask | FastAPI |
+| Port | 5000 | 8000 |
+| Hot reload | Yes | No |
+| Use case | Quick iteration | Deployment |
 
 ### Accessing the Chat
 
@@ -130,35 +152,36 @@ TadiAI: [Personalized response about Python]
 
 ```text
 TadiAI/
-├── main.py                          # Application entry point
-├── run.py                           # Alternative runner
-├── requirements.txt                 # Python dependencies
-├── .env.example                     # Environment variables template
-├── README.md                        # This file
+├── backend.py                          # PRODUCTION — FastAPI (Procfile uses this)
+├── main.py                             # LOCAL DEV ONLY — Flask backup
+├── requirements.txt                    # Python dependencies
+├── .env.example                        # Environment variables template
+├── Procfile                            # Deployment config
+├── README.md                           # This file
 │
 ├── app/
-│   ├── __init__.py                 # Flask app factory & configuration
-│   ├── routes.py                   # Web & API route handlers
+│   ├── __init__.py                     # Flask app factory (local dev)
+│   ├── routes.py                       # Flask route handlers (local dev)
 │   │
 │   ├── services/
 │   │   ├── __init__.py
-│   │   └── gemini.py               # Gemini API integration logic
+│   │   └── gemini.py                   # Gemini API integration (shared)
 │   │
 │   └── templates/
-│       └── index.html              # Frontend chat interface
+│       └── index.html                  # Frontend chat interface (shared)
+│
+└── tests/
+    └── test_backend_api.py             # FastAPI backend tests
 ```
 
-### File Descriptions
+### File Roles
 
-| File | Purpose |
-| --- | --- |
-| `main.py` | Entry point that creates and runs the Flask application |
-| `app/__init__.py` | Flask app factory, loads environment variables |
-| `app/routes.py` | Defines HTTP routes: `/` (chat page) and `/api/chat` (API endpoint) |
-| `app/services/gemini.py` | Handles Gemini API integration and message generation |
-| `app/templates/index.html` | Frontend UI for the chat interface |
-| `requirements.txt` | Lists all Python package dependencies |
-| `.env.example` | Template for environment configuration |
+| File | Environment | Purpose |
+| --- | --- | --- |
+| `backend.py` | Production | FastAPI server — serves API + web UI |
+| `main.py` | Local dev | Flask server — quick testing with hot-reload |
+| `app/services/gemini.py` | Both | Shared Gemini API logic |
+| `app/templates/index.html` | Both | Shared chat UI |
 
 ## Configuration
 
@@ -169,6 +192,9 @@ Create a `.env` file in the project root:
 ```env
 # Required: Your Google Gemini API Key
 GEMINI_API_KEY=your_actual_key_here
+
+# Optional: Model selection (matches the app's default model)
+GEMINI_MODEL=gemini-2.0-flash
 
 # Optional: Flask debug mode (1 = enabled, 0 = disabled)
 FLASK_DEBUG=1
@@ -200,11 +226,11 @@ You are replying in the user's personal style. Use these personality details:
 
 ### Model Configuration
 
-The app uses `gemini-3.6-flash` by default. To change the model:
+The app uses `gemini-2.0-flash` by default. To change the model:
 
 ```python
 # In app/services/gemini.py
-MODEL_NAME = "gemini-3.6-flash"  # Change this to another model
+MODEL_NAME = "gemini-2.0-flash"  # Change this to another model
 ```
 
 Available models: Check [Google Gemini documentation](https://ai.google.dev/models)
@@ -310,6 +336,14 @@ Processes a chat message and returns an AI response.
 }
 ```
 
+**Response (500 Internal Server Error):**
+
+```json
+{
+  "error": "GEMINI_API_KEY is not configured. Add it in your deployment environment (Railway/Render/Heroku) before sending chat requests."
+}
+```
+
 **Response (502 Bad Gateway):**
 
 ```json
@@ -330,17 +364,17 @@ Processes a chat message and returns an AI response.
          │
          │ HTTP POST /api/chat
          │
-┌────────▼─────────────────┐
-│   Flask Backend           │
-│  - routes.py: API handler │
-│  - Validates input        │
-└────────┬─────────────────┘
+┌────────▼─────────────────────┐
+│   FastAPI Backend (Production)│
+│   OR Flask (Local Dev)        │
+│  - Validates input            │
+└────────┬─────────────────────┘
          │
          │ Prepare request
          │
 ┌────────▼──────────────────────┐
 │  Gemini Service               │
-│  - gemini.py                  │
+│  - gemini.py (shared)         │
 │  - Manages conversation state │
 │  - Formats messages           │
 └────────┬───────────────────────┘
@@ -371,9 +405,9 @@ Processes a chat message and returns an AI response.
 ### Key Components
 
 - **Frontend**: HTML/CSS/JavaScript interface (`app/templates/index.html`)
-- **Backend API**: Flask routes handling HTTP requests (`app/routes.py`)
+- **Backend API**: FastAPI routes (`backend.py`) or Flask routes (`app/routes.py`)
 - **Service Layer**: Gemini API integration (`app/services/gemini.py`)
-- **Configuration**: Flask app factory and setup (`app/__init__.py`)
+- **Configuration**: Environment variables (`.env`)
 
 ## Troubleshooting
 
