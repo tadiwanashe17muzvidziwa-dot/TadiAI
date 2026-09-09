@@ -2,6 +2,7 @@
 # This is the primary entry point for deployment (Railway/Render/Heroku)
 # For local development, use main.py instead
 
+import asyncio
 import os
 from pathlib import Path
 
@@ -61,9 +62,13 @@ def health() -> dict[str, str]:
 
 
 @app.post("/api/chat", response_model=ChatResponse)
-def chat(request: ChatRequest) -> ChatResponse:
+async def chat(request: ChatRequest) -> ChatResponse:
     try:
-        result = generate_response(request.message, request.history)
+        # generate_response is blocking network I/O — run it in a thread
+        # so the event loop stays free for other requests.
+        result = await asyncio.to_thread(
+            generate_response, request.message, request.history
+        )
         return ChatResponse(response=result)
     except RuntimeError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc

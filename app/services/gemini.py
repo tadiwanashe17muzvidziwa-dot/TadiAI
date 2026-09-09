@@ -106,6 +106,18 @@ def get_gemini_api_key() -> str:
     return api_key
 
 
+# Reuse one client across requests — creating a new Client per chat
+# message adds noticeable latency to every reply.
+_client = None
+
+
+def get_client():
+    global _client
+    if _client is None:
+        _client = genai.Client(api_key=get_gemini_api_key())
+    return _client
+
+
 def _warn_if_unsupported_model(model: str) -> None:
     if model not in SUPPORTED_MODELS:
         warnings.warn(
@@ -143,9 +155,8 @@ def generate_response(
     Exception
         On API errors (rate-limits, network, etc.).
     """
-    api_key = get_gemini_api_key()
+    get_gemini_api_key()  # validates key is configured
     _warn_if_unsupported_model(MODEL_NAME)
-
     # Build conversation contents
     contents = []
     for turn in (history or [])[-20:]:
@@ -167,7 +178,7 @@ def generate_response(
 
     # Call the API — wrapped for easy adaptation to future SDK changes
     try:
-        client = genai.Client(api_key=api_key)
+        client = get_client()
         response = client.models.generate_content(
             model=MODEL_NAME,
             contents=contents,
