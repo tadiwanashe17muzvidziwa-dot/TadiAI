@@ -122,14 +122,15 @@ uvicorn backend:app --host 0.0.0.0 --port 8000
 ```
 
 Or via Procfile (auto-detected by Railway/Render/Heroku):
-```
+
+```text
 web: uvicorn backend:app --host 0.0.0.0 --port $PORT
 ```
 
 ### Quick Comparison
 
 | | Local Dev (`main.py`) | Production (`backend.py`) |
-|---|---|---|
+| --- | --- | --- |
 | Framework | Flask | FastAPI |
 | Port | 5000 | 8000 |
 | Hot reload | Yes | No |
